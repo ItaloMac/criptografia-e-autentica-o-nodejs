@@ -30,11 +30,14 @@ const login = async (req,res) => {
 
         if (!senhaValida) {
             return res.status(400).json({mensagem: 'Email ou senha invalida!'})
-        }
-
-        return res.json({mensagem: 'Usuario autenticado'})
-    
+        }    
+        
         const token = jwt.sign({id:usuario.rows[0].id}, senhaJwt, {expiresIn: '8h'})
+
+        const {senha: _, ...usuarioLogado} = usuario.rows[0]
+
+        return res.json({usuario: usuarioLogado, token})
+
 
     } catch (error) {
         return res.status(500).json({mensagem:'Erro interno do servidor'})
